@@ -69,4 +69,15 @@ public class CustomResponse<T> {
         return new CustomResponse<>(isSuccess, status, code, message , result);
     }
 
+    public static <T> CustomResponse<T> onSuccess(String message, T result) {
+
+        return CustomResponse.<T>builder()
+                .isSuccess(true)
+                .status(HttpStatus.OK)
+                .code(String.valueOf(HttpStatus.OK.value()))
+                .message(message)
+                .result(result)
+                .build();
+    }
+
 }
