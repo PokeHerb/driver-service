@@ -6,7 +6,6 @@ import org.pokeherb.driverservice.driver.domain.application.command.DriverComman
 import org.pokeherb.driverservice.driver.domain.application.dto.DriverCreateReqeustDto;
 import org.pokeherb.driverservice.driver.domain.application.dto.DriverUpdateRequestDto;
 import org.pokeherb.driverservice.driver.domain.application.query.DriverQueryService;
-import org.pokeherb.driverservice.driver.domain.entity.DriverType;
 import org.pokeherb.driverservice.driver.domain.entity.dto.DriverDto;
 import org.pokeherb.driverservice.global.infrastructure.CustomResponse;
 import org.pokeherb.driverservice.global.infrastructure.success.GeneralSuccessCode;
@@ -46,10 +45,9 @@ public class Controller {
 
     @DeleteMapping("{driverId}")
     public CustomResponse<?> deleteDriver(
-            @RequestHeader("username") String username,
             @PathVariable("driverId") UUID driverId) {
 
-        driverCommandService.deleteDriver(username, driverId);
+        driverCommandService.deleteDriver(driverId);
         return CustomResponse.onSuccess(GeneralSuccessCode.OK);
     }
 }

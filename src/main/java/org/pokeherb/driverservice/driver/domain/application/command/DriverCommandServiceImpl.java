@@ -8,6 +8,7 @@ import org.pokeherb.driverservice.driver.domain.entity.dto.DriverDto;
 import org.pokeherb.driverservice.driver.domain.exception.DriverErrorCode;
 import org.pokeherb.driverservice.driver.domain.infrastructure.DriverRepository;
 import org.pokeherb.driverservice.global.infrastructure.exception.CustomException;
+import org.pokeherb.driverservice.global.infrastructure.security.SecurityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class DriverCommandServiceImpl implements DriverCommandService {
 
     private final DriverRepository driverRepository;
+    private final SecurityUtils securityUtils;
 
     @Override
     public DriverDto createDriver(DriverCreateReqeustDto requestDto) {
@@ -45,9 +47,11 @@ public class DriverCommandServiceImpl implements DriverCommandService {
     }
 
     @Override
-    public void deleteDriver(String username, UUID driverId) {
+    public void deleteDriver(UUID driverId) {
 
         Driver driver = driverRepository.findById(driverId).orElseThrow(() -> new CustomException(DriverErrorCode.DRIVER_NOT_FOUND));
+
+        String username = securityUtils.getCurrentUsername();
 
         driver.deleteDriver(username);
 

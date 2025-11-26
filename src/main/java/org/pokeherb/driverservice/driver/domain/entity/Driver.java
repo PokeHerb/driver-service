@@ -82,8 +82,8 @@ public class Driver extends Auditable {
                 .hubId(this.hubId)
                 .slackId(this.slackId)
                 .name(this.name)
-                .driverType(this.driverType.name())
-                .driverStatus(this.driverStatus.name())
+                .driverType(this.driverType)
+                .driverStatus(this.driverStatus)
                 .build();
     }
 

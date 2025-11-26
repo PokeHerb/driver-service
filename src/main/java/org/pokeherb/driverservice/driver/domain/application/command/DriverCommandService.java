@@ -13,7 +13,7 @@ public interface DriverCommandService {
 
     DriverDto updateDriver(UUID driverId, DriverUpdateRequestDto requestDto);
 
-    void deleteDriver(String username, UUID driverId);
+    void deleteDriver( UUID driverId);
 
 
 }
