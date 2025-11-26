@@ -2,10 +2,13 @@ package org.pokeherb.driverservice.driver.domain.presentation;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.pokeherb.driverservice.driver.domain.application.DriverDispatchService;
 import org.pokeherb.driverservice.driver.domain.application.command.DriverCommandService;
 import org.pokeherb.driverservice.driver.domain.application.dto.DriverCreateReqeustDto;
+import org.pokeherb.driverservice.driver.domain.application.dto.DriverIdDto;
 import org.pokeherb.driverservice.driver.domain.application.dto.DriverUpdateRequestDto;
 import org.pokeherb.driverservice.driver.domain.application.query.DriverQueryService;
+import org.pokeherb.driverservice.driver.domain.entity.DriverType;
 import org.pokeherb.driverservice.driver.domain.entity.dto.DriverDto;
 import org.pokeherb.driverservice.global.infrastructure.CustomResponse;
 import org.pokeherb.driverservice.global.infrastructure.success.GeneralSuccessCode;
@@ -20,6 +23,7 @@ public class Controller {
 
     private final DriverQueryService driverQueryService;
     private final DriverCommandService driverCommandService;
+    private final DriverDispatchService driverDispatchService;
 
     @GetMapping("/{driverId}")
     public CustomResponse<?> getDriver(@PathVariable("driverId") UUID driverId) {
@@ -49,5 +53,17 @@ public class Controller {
 
         driverCommandService.deleteDriver(driverId);
         return CustomResponse.onSuccess(GeneralSuccessCode.OK);
+    }
+
+    // 이번 순서는 누구인가 API
+    @GetMapping("/")
+    public CustomResponse<?> getCurrentDriverId(Long hubId, DriverType driverType) {
+
+        DriverIdDto driverIdDto = driverDispatchService.dispatchDriver(hubId, driverType);
+
+        if (driverIdDto.driverId() == null) {
+            return CustomResponse.onSuccess("사용 가능한 배송자가 없습니다.", null);
+        }
+        return CustomResponse.onSuccess(GeneralSuccessCode.OK, driverIdDto);
     }
 }
