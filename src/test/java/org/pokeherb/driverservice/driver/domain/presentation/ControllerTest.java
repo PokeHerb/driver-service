@@ -8,6 +8,8 @@ import org.pokeherb.driverservice.driver.domain.application.dto.DriverCreateReqe
 import org.pokeherb.driverservice.driver.domain.application.query.DriverQueryService;
 import org.pokeherb.driverservice.driver.domain.entity.DriverType;
 import org.pokeherb.driverservice.driver.domain.entity.dto.DriverDto;
+import org.pokeherb.driverservice.driver.domain.exception.DriverErrorCode;
+import org.pokeherb.driverservice.global.infrastructure.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +24,8 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -88,6 +92,34 @@ class ControllerTest {
     }
 
     @Test
-    void deleteDriver() {
+    @DisplayName(value = "드라이버 삭제")
+    @WithMockUser(username = "testUser", roles = {"MASTER"})
+    void deleteDriver() throws Exception{
+        // given
+        UUID driverId = UUID.randomUUID();
+
+        mockMvc.perform(delete("/{driverId}", driverId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 드라이버 삭제 시 404 반환")
+    @WithMockUser(username = "testUser", roles = {"MASTER"})
+    void deleteDriver_NotFound() throws Exception {
+        // given
+        UUID driverId = UUID.randomUUID();
+
+        // 수정 포인트: 구체적인 driverId 변수 대신 any() 혹은 eq()를 사용하여 매칭 범위를 안전하게 잡음
+        doThrow(new CustomException(DriverErrorCode.DRIVER_NOT_FOUND))
+                .when(driverCommandService).deleteDriver(any(UUID.class));
+
+        // when & then
+        mockMvc.perform(delete("/{driverId}", driverId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
     }
 }

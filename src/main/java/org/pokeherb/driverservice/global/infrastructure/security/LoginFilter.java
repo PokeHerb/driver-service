@@ -39,6 +39,7 @@ public class LoginFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
         doLogin((HttpServletRequest) servletRequest);
+        filterChain.doFilter(servletRequest, servletResponse);
 
     }
 

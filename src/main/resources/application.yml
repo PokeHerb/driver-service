@@ -8,14 +8,14 @@ spring:
       discovery:
         enabled: true
         service-id: config-server
-
-springdoc:
-  swagger-ui:
-    # Swagger UI 접속 URL
-    path: /swagger-ui.html
-  api-docs:
-    # OpenAPI JSON URL
-    path: /v3/api-docs
+#
+#springdoc:
+#  swagger-ui:
+#    # Swagger UI 접속 URL
+#    path: /swagger-ui.html
+#  api-docs:
+#    # OpenAPI JSON URL
+#    path: /v3/api-docs
 
 eureka:
   instance:
@@ -27,3 +27,5 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://35.216.57.113:3150/eureka/
+server:
+  port: 8089

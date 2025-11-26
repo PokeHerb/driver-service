@@ -21,7 +21,7 @@ public class Controller {
     private final DriverQueryService driverQueryService;
     private final DriverCommandService driverCommandService;
 
-    @GetMapping("{driverId}")
+    @GetMapping("/{driverId}")
     public CustomResponse<?> getDriver(@PathVariable("driverId") UUID driverId) {
         DriverDto driverDto = driverQueryService.getDriver(driverId);
         return CustomResponse.onSuccess(GeneralSuccessCode.OK, driverDto);
@@ -34,7 +34,7 @@ public class Controller {
         return CustomResponse.onSuccess(GeneralSuccessCode.CREATED, driverDto);
     }
 
-    @PutMapping("{driverId}")
+    @PutMapping("/{driverId}")
     public CustomResponse<?> updateDriverType(
             @PathVariable("driverId") UUID driverId,
             @RequestBody DriverUpdateRequestDto requestDto
@@ -43,7 +43,7 @@ public class Controller {
         return CustomResponse.onSuccess(GeneralSuccessCode.OK, driverDto);
     }
 
-    @DeleteMapping("{driverId}")
+    @DeleteMapping("/{driverId}")
     public CustomResponse<?> deleteDriver(
             @PathVariable("driverId") UUID driverId) {
 
