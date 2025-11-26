@@ -35,9 +35,9 @@ public class DriverCommandServiceImpl implements DriverCommandService {
     }
 
     @Override
-    public DriverDto updateDriver(DriverUpdateRequestDto requestDto) {
+    public DriverDto updateDriver(UUID driverId, DriverUpdateRequestDto requestDto) {
 
-        Driver driver = driverRepository.findById(requestDto.driverId()).orElseThrow(() -> new CustomException(DriverErrorCode.DRIVER_NOT_FOUND));
+        Driver driver = driverRepository.findById(driverId).orElseThrow(() -> new CustomException(DriverErrorCode.DRIVER_NOT_FOUND));
 
         driver.changeInfo(requestDto);
 

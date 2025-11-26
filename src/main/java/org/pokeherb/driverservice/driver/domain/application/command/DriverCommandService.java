@@ -11,7 +11,7 @@ public interface DriverCommandService {
 
     DriverDto createDriver(DriverCreateReqeustDto requestDto);
 
-    DriverDto updateDriver(DriverUpdateRequestDto requestDto);
+    DriverDto updateDriver(UUID driverId, DriverUpdateRequestDto requestDto);
 
     void deleteDriver(String username, UUID driverId);
 
