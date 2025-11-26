@@ -6,7 +6,6 @@ import org.pokeherb.driverservice.driver.domain.application.command.DriverComman
 import org.pokeherb.driverservice.driver.domain.application.dto.DriverCreateReqeustDto;
 import org.pokeherb.driverservice.driver.domain.application.dto.DriverUpdateRequestDto;
 import org.pokeherb.driverservice.driver.domain.application.query.DriverQueryService;
-import org.pokeherb.driverservice.driver.domain.entity.DriverType;
 import org.pokeherb.driverservice.driver.domain.entity.dto.DriverDto;
 import org.pokeherb.driverservice.global.infrastructure.CustomResponse;
 import org.pokeherb.driverservice.global.infrastructure.success.GeneralSuccessCode;
@@ -22,7 +21,7 @@ public class Controller {
     private final DriverQueryService driverQueryService;
     private final DriverCommandService driverCommandService;
 
-    @GetMapping("{driverId}")
+    @GetMapping("/{driverId}")
     public CustomResponse<?> getDriver(@PathVariable("driverId") UUID driverId) {
         DriverDto driverDto = driverQueryService.getDriver(driverId);
         return CustomResponse.onSuccess(GeneralSuccessCode.OK, driverDto);
@@ -35,7 +34,7 @@ public class Controller {
         return CustomResponse.onSuccess(GeneralSuccessCode.CREATED, driverDto);
     }
 
-    @PutMapping("{driverId}")
+    @PutMapping("/{driverId}")
     public CustomResponse<?> updateDriverType(
             @PathVariable("driverId") UUID driverId,
             @RequestBody DriverUpdateRequestDto requestDto
@@ -44,12 +43,11 @@ public class Controller {
         return CustomResponse.onSuccess(GeneralSuccessCode.OK, driverDto);
     }
 
-    @DeleteMapping("{driverId}")
+    @DeleteMapping("/{driverId}")
     public CustomResponse<?> deleteDriver(
-            @RequestHeader("username") String username,
             @PathVariable("driverId") UUID driverId) {
 
-        driverCommandService.deleteDriver(username, driverId);
+        driverCommandService.deleteDriver(driverId);
         return CustomResponse.onSuccess(GeneralSuccessCode.OK);
     }
 }
