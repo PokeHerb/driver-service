@@ -71,7 +71,7 @@ public class DriverDispatchService {
                 if(orderId != null) {
                     DriverAssignedMessage message = DriverAssignedMessage.builder()
                             .orderId(orderId)
-                            .deliveryStatus(candidate.getDriverStatus().name())
+                            .deliveryStatus("ASSIGNED")
                             .changeAt(LocalDateTime.now())
                             .build();
 
