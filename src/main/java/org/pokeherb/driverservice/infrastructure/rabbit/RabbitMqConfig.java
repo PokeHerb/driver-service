@@ -24,11 +24,5 @@ public class RabbitMqConfig {
         return new TopicExchange(DRIVER_DELIVERY_STATUS_EXCHANGE, true, false);
     }
 
-    @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-        RabbitTemplate template = new RabbitTemplate(connectionFactory);
-
-        return template;
-    }
 
 }
