@@ -40,7 +40,7 @@ public interface DriverRepository extends JpaRepository<Driver, UUID> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("""
             SELECT d FROM Driver d
-            WHERE d.hubId = :hubId AND d.driverStatus = :driverType
+            WHERE d.hubId = :hubId AND d.driverType = :driverType
             ORDER BY d.sequence ASC
             """)
     List<Driver> findAllByHubIdAndTypeWithLock(@Param("hubId") Long hubId, @Param("driverType") DriverType driverType);
