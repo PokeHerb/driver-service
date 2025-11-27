@@ -22,6 +22,10 @@ public class DriverAssignedProducer {
                 RabbitMqConfig.DRIVER_ORDER_STATUS_EXCHANGE,
                 message
         );
+        rabbitTemplate.convertAndSend(
+                RabbitMqConfig.DRIVER_DELIVERY_STATUS_EXCHANGE,
+                message
+        );
 
         log.info("RabbitMQ 기사 배정되었다는 메시지 발행: orderId={}",
                 message.orderId());
