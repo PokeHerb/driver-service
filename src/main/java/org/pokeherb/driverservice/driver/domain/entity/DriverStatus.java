@@ -4,4 +4,5 @@ public enum DriverStatus {
 
     WAITING,
     DRIVING,
+    DELIVERED
 }

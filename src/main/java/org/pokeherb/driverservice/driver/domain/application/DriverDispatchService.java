@@ -9,11 +9,15 @@ import org.pokeherb.driverservice.driver.domain.entity.DriverType;
 import org.pokeherb.driverservice.driver.domain.exception.DriverErrorCode;
 import org.pokeherb.driverservice.driver.domain.infrastructure.DriverRepository;
 import org.pokeherb.driverservice.global.infrastructure.exception.CustomException;
+import org.pokeherb.driverservice.infrastructure.dto.DriverAssignedMessage;
+import org.pokeherb.driverservice.infrastructure.rabbit.DriverAssignedProducer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,13 +26,14 @@ public class DriverDispatchService {
 
     private final DriverRepository driverRepository;
     private final static int DRIVER_SIZE = 10;
+    private final DriverAssignedProducer driverAssignedProducer;
 
     @Transactional
-    public DriverIdDto dispatchVendorDriver(Long hubId) {
+    public DriverIdDto dispatchVendorDriver(Long hubId, UUID orderId) {
 
         List<Driver> drivers = driverRepository.findAllByHubIdAndTypeWithLock(hubId, DriverType.VENDOR_DRIVER);
 
-        return dispatchInternal(drivers, DriverType.VENDOR_DRIVER, hubId);
+        return dispatchInternal(drivers, DriverType.VENDOR_DRIVER, hubId, orderId);
     }
 
     @Transactional
@@ -36,10 +41,11 @@ public class DriverDispatchService {
 
         List<Driver> drivers = driverRepository.findAllByWithLock(DriverType.HUB_DRIVER);
 
-        return dispatchInternal(drivers, DriverType.HUB_DRIVER, null);
+
+        return dispatchInternal(drivers, DriverType.HUB_DRIVER, null, null);
     }
 
-    private DriverIdDto dispatchInternal(List<Driver> drivers, DriverType type, Long hubId) {
+    private DriverIdDto dispatchInternal(List<Driver> drivers, DriverType type, Long hubId, UUID orderId) {
 
         if (drivers.isEmpty()) {
             throw new CustomException(DriverErrorCode.NO_AVAILABLE_DRIVER);
@@ -62,9 +68,21 @@ public class DriverDispatchService {
                 candidate.startDelivery();
                 log.info("[{}] 배차 성공 : 허브ID {}, 기사ID {}", type,  hubId, candidate.getId());
 
+                if(orderId != null) {
+                    DriverAssignedMessage message = DriverAssignedMessage.builder()
+                            .orderId(orderId)
+                            .deliveryStatus(candidate.getDriverStatus().name())
+                            .changeAt(LocalDateTime.now())
+                            .build();
+
+                    driverAssignedProducer.publish(message);
+                }
                 return DriverIdDto.of(candidate.getId(), candidate.getName());
             }
         }
+
+
+
         return DriverIdDto.of(null, null);
     }
 }

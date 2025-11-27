@@ -56,10 +56,12 @@ public class Controller {
     }
 
     // 이번 순서는 누구인가 API
-    @GetMapping("/vendor/{hubId}")
-    public CustomResponse<?> getVendorDriverId(@PathVariable("hubId") Long hubId) {
+    @GetMapping("/vendor/{hubId}/{orderId}")
+    public CustomResponse<?> getVendorDriverId(
+            @PathVariable("hubId") Long hubId,
+            @PathVariable("orderId") UUID orderId) {
 
-        DriverIdDto driverIdDto = driverDispatchService.dispatchVendorDriver(hubId);
+        DriverIdDto driverIdDto = driverDispatchService.dispatchVendorDriver(hubId, orderId);
 
         if (driverIdDto.driverId() == null) {
             return CustomResponse.onSuccess("사용 가능한 업체 배송자가 없습니다.", null);
@@ -78,4 +80,6 @@ public class Controller {
         }
         return CustomResponse.onSuccess(GeneralSuccessCode.OK, driverIdDto);
     }
+
+
 }

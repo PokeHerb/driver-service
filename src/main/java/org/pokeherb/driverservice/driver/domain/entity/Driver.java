@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Comment;
 import org.pokeherb.driverservice.driver.domain.application.dto.DriverUpdateRequestDto;
 import org.pokeherb.driverservice.driver.domain.entity.dto.DriverDto;
 import org.pokeherb.driverservice.driver.domain.exception.DriverErrorCode;
