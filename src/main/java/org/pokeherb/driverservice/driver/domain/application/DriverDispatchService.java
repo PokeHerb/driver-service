@@ -55,7 +55,7 @@ public class DriverDispatchService {
 
         for (int i = 0; i < DRIVER_SIZE; i++) {
 
-            int nextIndex = (lastSequence + i) % DRIVER_SIZE;
+            int nextIndex = (lastSequence + i) % DRIVER_SIZE - 1;
             Driver candidate = drivers.get(nextIndex);
 
             if (candidate.getDriverStatus() == DriverStatus.WAITING) {
