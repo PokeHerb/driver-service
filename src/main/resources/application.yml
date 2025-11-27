@@ -2,7 +2,8 @@ spring:
   application:
     name: driver-service
   config:
-    import: 'optional:configserver: '
+#    import: 'optional:configserver: '
+    import: 'optional:configserver:'
   cloud:
     config:
       discovery:
