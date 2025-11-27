@@ -4,10 +4,11 @@ import java.util.UUID;
 
 public record DriverIdDto(
 
-        UUID driverId
+        UUID driverId,
+        String name
 
 ) {
-    public static DriverIdDto of(UUID driverId) {
-        return new DriverIdDto(driverId);
+    public static DriverIdDto of(UUID driverId, String name) {
+        return new DriverIdDto(driverId, name);
     }
 }

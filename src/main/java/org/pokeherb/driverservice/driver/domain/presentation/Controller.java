@@ -56,13 +56,25 @@ public class Controller {
     }
 
     // 이번 순서는 누구인가 API
-    @GetMapping("/")
-    public CustomResponse<?> getCurrentDriverId(Long hubId, DriverType driverType) {
+    @GetMapping("/vendor/{hubId}")
+    public CustomResponse<?> getVendorDriverId(@PathVariable("hubId") Long hubId) {
 
-        DriverIdDto driverIdDto = driverDispatchService.dispatchDriver(hubId, driverType);
+        DriverIdDto driverIdDto = driverDispatchService.dispatchVendorDriver(hubId);
 
         if (driverIdDto.driverId() == null) {
-            return CustomResponse.onSuccess("사용 가능한 배송자가 없습니다.", null);
+            return CustomResponse.onSuccess("사용 가능한 업체 배송자가 없습니다.", null);
+        }
+        return CustomResponse.onSuccess(GeneralSuccessCode.OK, driverIdDto);
+    }
+
+    // 이번 순서는 누구인가 API
+    @GetMapping("/hub")
+    public CustomResponse<?> getHubDriverId() {
+
+        DriverIdDto driverIdDto = driverDispatchService.dispatchHubDriver();
+
+        if (driverIdDto.driverId() == null) {
+            return CustomResponse.onSuccess("사용 가능한 허브 배송자가 없습니다.", null);
         }
         return CustomResponse.onSuccess(GeneralSuccessCode.OK, driverIdDto);
     }

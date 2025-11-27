@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,5 +34,23 @@ public interface DriverRepository extends JpaRepository<Driver, UUID> {
             AND d.sequence = :sequence
             AND d.driverType = :type
             """)
-    Optional<Driver> findByHubIdAndSequenceWithLock(@Param("hubId") Long hubId, @Param("sequence")int sequence, @Param("type") DriverType driverType);
+    Optional<Driver> findByHubIdAndSequenceWithLock(@Param("hubId") Long hubId, @Param("sequence") int sequence, @Param("type") DriverType driverType);
+
+    // 해당 허브, 해당 타입의 기사 10명을 Sequence 순으로 조회
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("""
+            SELECT d FROM Driver d
+            WHERE d.hubId = :hubId AND d.driverStatus = :driverType
+            ORDER BY d.sequence ASC
+            """)
+    List<Driver> findAllByHubIdAndTypeWithLock(@Param("hubId") Long hubId, @Param("driverType") DriverType driverType);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("""
+            SELECT d FROM Driver d
+            WHERE d.hubId = null AND d.driverType = :driverType
+            ORDER BY d.sequence ASC
+            """)
+    List<Driver> findAllByWithLock(DriverType driverType);
+
 }

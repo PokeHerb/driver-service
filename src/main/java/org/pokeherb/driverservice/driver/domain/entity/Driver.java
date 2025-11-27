@@ -26,7 +26,7 @@ public class Driver extends Auditable {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    // 소속 허브 아이디
+    // 소속 허브 아이디 - 허브<->허브 배송 담당자는 허브 아이디가 필요 없음
     private Long hubId;
 
     // 슬랙 알림 아이디
@@ -47,14 +47,14 @@ public class Driver extends Auditable {
     private LocalDateTime lastAssignedAt;
 
     @Builder
-    public Driver(Long hubId, UUID slackId, DriverType driverType, String name) {
+    public Driver(Long hubId, UUID slackId, DriverType driverType, String name, int sequence) {
         this.hubId = hubId;
         this.slackId = slackId;
         this.driverType = driverType;
         this.name = name;
-        this.sequence = 0;
+        this.sequence = sequence;
         this.driverStatus = DriverStatus.WAITING;
-        this.lastAssignedAt = LocalDateTime.MIN;
+        this.lastAssignedAt = null;
     }
 
     // 배송이 할당되어 시작된 경우
