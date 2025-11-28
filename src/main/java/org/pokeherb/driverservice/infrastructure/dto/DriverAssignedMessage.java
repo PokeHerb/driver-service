@@ -11,6 +11,6 @@ public record DriverAssignedMessage(
         UUID orderId,
         String deliveryStatus,
         LocalDateTime changeAt
-        ) implements Serializable {
+        )  {
 
 }

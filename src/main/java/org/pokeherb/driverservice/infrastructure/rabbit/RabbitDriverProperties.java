@@ -7,7 +7,7 @@ public record RabbitDriverProperties(
         String exchange,
         String queue,
         String routingKey
-
 ) {
+
 
 }
