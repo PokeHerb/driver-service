@@ -8,7 +8,6 @@ import org.pokeherb.driverservice.driver.domain.application.dto.DriverCreateReqe
 import org.pokeherb.driverservice.driver.domain.application.dto.DriverIdDto;
 import org.pokeherb.driverservice.driver.domain.application.dto.DriverUpdateRequestDto;
 import org.pokeherb.driverservice.driver.domain.application.query.DriverQueryService;
-import org.pokeherb.driverservice.driver.domain.entity.DriverType;
 import org.pokeherb.driverservice.driver.domain.entity.dto.DriverDto;
 import org.pokeherb.driverservice.global.infrastructure.CustomResponse;
 import org.pokeherb.driverservice.global.infrastructure.success.GeneralSuccessCode;

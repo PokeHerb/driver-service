@@ -10,7 +10,7 @@ import org.pokeherb.driverservice.driver.domain.exception.DriverErrorCode;
 import org.pokeherb.driverservice.driver.domain.infrastructure.DriverRepository;
 import org.pokeherb.driverservice.global.infrastructure.exception.CustomException;
 import org.pokeherb.driverservice.infrastructure.dto.DriverAssignedMessage;
-import org.pokeherb.driverservice.infrastructure.rabbit.DriverAssignedProducer;
+import org.pokeherb.driverservice.infrastructure.rabbit.DriverEventProducer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +25,8 @@ import java.util.UUID;
 public class DriverDispatchService {
 
     private final DriverRepository driverRepository;
+    private final DriverEventProducer driverEventProducer;
     private final static int DRIVER_SIZE = 10;
-    private final DriverAssignedProducer driverAssignedProducer;
 
     @Transactional
     public DriverIdDto dispatchVendorDriver(Long hubId, UUID orderId) {
@@ -59,6 +59,7 @@ public class DriverDispatchService {
                 .map(Driver::getSequence)
                 .orElse(0);
 
+        // 기사 할당 로직
         for (int i = 0; i < DRIVER_SIZE; i++) {
 
             int nextIndex = (lastSequence + i) % DRIVER_SIZE - 1;
@@ -75,7 +76,8 @@ public class DriverDispatchService {
                             .changeAt(LocalDateTime.now())
                             .build();
 
-                    driverAssignedProducer.publish(message);
+                    driverEventProducer.sendDriverAssignedEvent(message);
+
                 }
                 return DriverIdDto.of(candidate.getId(), candidate.getName());
             }
