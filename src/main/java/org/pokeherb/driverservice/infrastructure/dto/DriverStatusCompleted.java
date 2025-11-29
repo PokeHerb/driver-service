@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
-public record DriverOrderStatus(
+public record DriverStatusCompleted(
         UUID orderId,
         String orderStatus,
         LocalDateTime changedAt
