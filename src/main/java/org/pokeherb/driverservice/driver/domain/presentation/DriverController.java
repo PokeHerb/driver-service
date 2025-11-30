@@ -18,11 +18,12 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Driver Controller", description = "Driver 관련 API")
-public class Controller {
+public class DriverController {
 
     private final DriverQueryService driverQueryService;
     private final DriverCommandService driverCommandService;
     private final DriverDispatchService driverDispatchService;
+
 
     @GetMapping("/{driverId}")
     public CustomResponse<?> getDriver(@PathVariable("driverId") UUID driverId) {
